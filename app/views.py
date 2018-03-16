@@ -58,7 +58,7 @@ def Mock(request,url):
     try:
         snippet = Snippet.objects.get(url=request.path)
     except Snippet.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return HttpResponse(status=status.HTTP_404_NOT_FOUND)
     f=os.path.join(os.getcwd(),'mock.js')
     ctx = execjs.compile(open(f,'r').read().decode('utf-8'))
     time.sleep(snippet.sleep)
