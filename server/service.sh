@@ -28,7 +28,7 @@ usage() {
 }
 
 is_exist(){
-    pid=`ps -ef|grep supervisord |grep -v grep|awk '{print $2}' `
+    pid=`ps -ef|grep 'supervisord -c /opt/pyEnvMock' |grep -v grep|awk '{print $2}' `
     if [ -z "${pid}" ];  then
         return 1
     else
