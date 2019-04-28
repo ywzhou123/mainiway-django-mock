@@ -41,13 +41,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'app.apps.AppConfig',
     'rest_framework.authtoken'
-
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',#跨域访问
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -55,7 +54,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True #跨域访问
+CORS_ORIGIN_ALLOW_ALL = True
 # 或通过CORS_ORIGIN_WHITELIST设置白名单
 
 ROOT_URLCONF = 'MockServer.urls'
@@ -87,7 +86,7 @@ WSGI_APPLICATION = 'MockServer.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'demo01',
+        'NAME': 'MockServer',
         'USER': 'root',
         'PASSWORD': '123456',
         'HOST': 'localhost',
