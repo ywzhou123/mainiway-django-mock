@@ -17,18 +17,22 @@ install(){
 }
 
 reload(){
-#    cp -f $CONFS/nginx.conf /etc/nginx/nginx.conf
-#    cp -f $SERVER/config.py $ROOT/FarmPlatform/config.py
+    if [ ! -d '/etc/supervisor/conf.d' ]; then
+      mkdir -p /etc/supervisor/conf.d
+    fi
+    cp -f $CONFS/nginx.conf /etc/nginx/nginx.conf
+    cp -f $CONFS/super*.ini /etc/supervisor/conf.d/
+    cp -f $CONFS/supervisor.conf /etc/supervisor/
     cp -f $SERVER/nginx.conf /etc/nginx/conf.d/nginx_django_mock.conf
 }
 
 usage() {
-    echo "Usage: sh service.sh [install|start|stop|reload|restart|status|killsuper] [env_dev|env_test|env_pre|env_production|env_demo]"
+    echo "Usage: sh service.sh [install|start|stop|reload|restart|status|killsuper] [env_dev|env_test|env_pre|env_demo|env_demo]"
     exit 1
 }
 
 is_exist(){
-    pid=`ps -ef|grep 'supervisord -c /opt/pyEnvMock' |grep -v grep|awk '{print $2}' `
+    pid=`ps -ef|grep supervisord |grep -v grep|awk '{print $2}' `
     if [ -z "${pid}" ];  then
         return 1
     else
@@ -41,7 +45,7 @@ start(){
     if [ $? -eq "0" ];  then
         echo "supervisord is already running. pid=${pid} ."
     else
-        supervisord -c $CONFS/supervisor.conf
+        supervisord -c /etc/supervisor/supervisor.conf
     fi
     systemctl start nginx
 }
@@ -71,10 +75,10 @@ restart(){
     if [ $? -eq "0" ]; then
         supervisorctl -u ${USERNAME} -p ${PASSWORD} restart all
         if [ $? -ne "0" ]; then
-            killsuper && supervisord -c $CONFS/supervisor.conf
+            killsuper && supervisord -c /etc/supervisor/supervisor.conf
         fi
     else
-        supervisord -c $CONFS/supervisor.conf
+        supervisord -c /etc/supervisor/supervisor.conf
     fi
     systemctl restart nginx
 }
@@ -86,7 +90,7 @@ killsuper(){
 }
 
 case "$2" in
-    "env_dev" | "env_test" | "env_pre"| "env_production" | "env_demo")
+    "env_dev" | "env_test" | "env_pre"| "env_demo" | "env_demo")
         ;;
     *)
         usage
