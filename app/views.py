@@ -15,9 +15,7 @@ from rest_framework import generics,viewsets
 
 #权限相关
 from django.contrib.auth.models import User
-from rest_framework import permissions
-from rest_framework.decorators import permission_classes
-from .permissions import IsOwnerOrReadOnly
+from rest_framework import permissions, authentication
 from .serializers import UserSerializer
 
 # 分页
@@ -34,6 +32,10 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    authentication_classes = (authentication.TokenAuthentication, authentication.SessionAuthentication)
+
+    def get_object(self):
+        return self.request.user
 
 class SnippetViewSet(viewsets.ModelViewSet):
     """
@@ -41,13 +43,13 @@ class SnippetViewSet(viewsets.ModelViewSet):
     """
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
-    # authentication_classes = (authentication.TokenAuthentication,)  # 认证策略属性
-    # permission_classes = (permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly,) # 权限策略属性
+    authentication_classes = (authentication.TokenAuthentication, authentication.SessionAuthentication)  # 认证策略属性
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, ) # 权限策略属性
     pagination_class = SnippetListPagination
 
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     search_fields = ('title','url')
-    ordering = ('url', )
+    ordering = ('url', '-id')
     # def pre_save(self, obj):
     #     obj.owner = self.request.user
 
@@ -59,10 +61,10 @@ def Mock(request,url):
         snippet = Snippet.objects.get(url=request.path)
     except Snippet.DoesNotExist:
         return HttpResponse(status=status.HTTP_404_NOT_FOUND)
-    f=os.path.join(os.getcwd(),'mock.js')
+    f = os.path.join(os.getcwd(),'mock.js')
     ctx = execjs.compile(open(f,'r').read().decode('utf-8'))
     time.sleep(snippet.sleep)
-    data=ctx.call('getMockData', snippet.code)
+    data = ctx.call('getMockData', snippet.code)
 
     return HttpResponse(data)
 

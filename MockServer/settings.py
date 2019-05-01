@@ -16,6 +16,9 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+os.environ["EXECJS_RUNTIME"] = "Node"
+os.environ["NODE_PATH"] = os.path.join(BASE_DIR, "node_modules")
+os.environ['PATH'] = '/Users/ywzhou/git/nvm/versions/node/v10.15.1/bin/:/usr/bin:' + os.environ['PATH']
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -88,6 +91,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'MockServer',
         'USER': 'root',
+        # 'PASSWORD': '123456',
+        # 'HOST': 'localhost',
         'PASSWORD': 'uatysk@sql123',
         'HOST': '106.12.130.102',
         'PORT': '3306',
@@ -150,12 +155,16 @@ REST_FRAMEWORK = {
     ],
     # 'DEFAULT_PAGINATION_CLASS': 'MockServer.apps.core.pagination.CustomPagination',
     # 'PAGE_SIZE': 100
-    # 'DEFAULT_AUTHENTICATION_CLASSES': (
-    #     'rest_framework.authentication.TokenAuthentication',
-    # )
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+    )
 }
 
 LOGIN_URL = '/'
 
 
 REST_FRAMEWORK_TOKEN_EXPIRE_MINUTES = 60
+
+os.environ["EXECJS_RUNTIME"] = "Node"
