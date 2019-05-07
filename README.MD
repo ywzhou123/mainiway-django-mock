@@ -76,7 +76,7 @@
 
 ### BUG
 
-错误：
+错误1：
 
 ```
     Could not find an available JavaScript runtime
@@ -110,3 +110,12 @@
     which node
     ln -s /<path>/node /usr/bin
 ```
+
+
+错误2：
+
+```
+    list index out of range
+```
+
+设置setting.py中的DEBUG=False
