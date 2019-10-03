@@ -91,10 +91,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'MockServer',
         'USER': 'root',
-        # 'PASSWORD': '123456',
-        # 'HOST': 'localhost',
-        'PASSWORD': 'uatysk@sql123',
-        'HOST': '106.12.130.102',
+        'PASSWORD': '123456',
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }

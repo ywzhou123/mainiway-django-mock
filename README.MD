@@ -7,9 +7,9 @@
     cd /opt
     which python2.7
     virtualenv pyEnvMock --python=/usr/bin/python2.7 --no-site-packages
-     virtualenv pyEnvMock --python=/Users/ywzhou/anaconda3/bin/python3.6  --no-site-packages
+    virtualenv pyEnvMock --python=/Users/ywzhou/anaconda3/bin/python3.6  --no-site-packages
 
-```
+```ls
 
 进入虚拟环境，以下pip安装都需要在虚拟环境中执行
 ```
@@ -29,13 +29,6 @@
     yum install python-devel mysql-devel zlib-devel openssl-devel
     pip install uwsgi
 ```
-
-安装node软件包
-```
-    yum -y install nodejs
-    npm install mockjs
-```
-
 
 ### 3、准备数据库
 
@@ -102,15 +95,6 @@
 ```
     os.environ['PATH'] = '/usr/bin:' + os.environ['PATH']
 ```
-
-    安装nodejs环境
-
-```
-    yum install nodejs
-    which node
-    ln -s /<path>/node /usr/bin
-```
-
 
 错误2：
 

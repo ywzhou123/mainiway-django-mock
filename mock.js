@@ -1,4 +1,4 @@
-var Mock = require('mockjs');
+var Mock = require('./mock-min.js');
 
 function getMockData(data) {
     var mock = Mock.mock(JSON.parse(data));
