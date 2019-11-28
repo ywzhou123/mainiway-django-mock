@@ -9,7 +9,7 @@
     virtualenv pyEnvMock --python=/usr/bin/python2.7 --no-site-packages
     virtualenv pyEnvMock --python=/Users/ywzhou/anaconda3/bin/python3.6  --no-site-packages
 
-```ls
+```
 
 进入虚拟环境，以下pip安装都需要在虚拟环境中执行
 ```
@@ -103,3 +103,81 @@
 ```
 
 设置setting.py中的DEBUG=False
+
+错误3:
+
+跨域问题
+在nginx.confg文件中配置
+```
+        add_header  Access-Control-Allow-Headers '*';
+```
+
+
+
+
+# 使用docker方式部署
+
+前提：
+    安装docker及mysql redis容器服务
+
+### 1、MockServer后台
+
+拉取项目
+
+```
+	mkdir -p /docker/MockServer/{MockServer,web,logs,conf}
+	cd /docker/MockServer/MockServer
+	git init
+	git pull https://github.com/ywzhou123/mainiway-django-mock.git
+```
+
+编译容器
+
+```
+    sudo docker build -t django-mock .
+    sudo sh start.sh
+```
+
+导入sql数据
+
+```
+    docker cp data/MockServer.sql mysql:/MockServer.sql
+    docker exec -it mysql bash
+    mysql -uroot -p123456
+    >CREATE DATABASE  `MockServer` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    >use MockServer;
+    >source MockServer.sql;
+```
+
+访问：
+http://ip:8004/snippets/
+
+部署前台页面:
+    如果不是部署在同一台服务器，或者后端不是8004端口，需要修改webpack.config.js中的ip和端口
+    将打包生成的dist目录下的内容上传到/docker/MockServer/web
+    不想打包，可以直接使用前端项目中的dist目录
+
+[项目仓库](https://github.com/ywzhou123/mainiway-react-mock)
+
+
+
+```
+vi /etc/nginx/conf.d/mock.conf
+server {
+    listen      80;
+
+    server_name mock.ywzhou.shop;
+    charset     utf-8;
+
+    client_max_body_size 20M;
+
+    location    / {
+        add_header  Access-Control-Allow-Headers '*';
+        root    /docker/MockServer/web;
+        index   index.html;
+    }
+}
+systemctl reload nginx
+```
+
+http://mock.ywzhou.shop
